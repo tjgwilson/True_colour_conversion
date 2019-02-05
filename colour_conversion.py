@@ -65,21 +65,20 @@ def normalize_point(x,min,max,new_min,new_max):
     return ((x-min)*(new_max-new_min))/(max-min)
 
 def add_colour(c1,c2,weight):#c1 and c2 are 3 element turples
-
+    weight = weight + 0.1
     """if(c1[0] == 0 and c1[1] == 0 and c1[2] == 0):
         weight = 1.
     if(c2[0] == 0 and c2[1] == 0 and c2[2] == 0):
         weight = 1."""
-    R = (c1[0] + weight*c2[0])
-    if(R > 255):
-        R = 255
-    G = (c1[1] + weight*c2[1])
-    if(G > 255):
-        G = 255
-    B = (c1[2] + weight*c2[2])
-    if(B > 255):
-        B = 255
-
+    R = (c1[0] + weight*c2[0]) / 2.0
+    #if(R > 255):
+    #    R = 255
+    G = (c1[1] + weight*c2[1]) / 2.0
+    #if(G > 255):
+    #    G = 255
+    B = (c1[2] + weight*c2[2]) / 2.0
+    #if(B > 255):
+    #    B = 255
     return (int(R),int(G),int(B))
 
 def create_image(filename,wavelength,numframes,output):
@@ -87,7 +86,6 @@ def create_image(filename,wavelength,numframes,output):
         data = data_file[0].data
 
     data_size = np.shape(data)
-    max_int = np.amax(data)
     count = 0
     im = Image.new("RGB", (data_size[1], data_size[2]))
     pix = im.load()
@@ -114,8 +112,8 @@ im1 = Image.new("RGB", (npixels,npixels))
 im2 = Image.new("RGB", (npixels,npixels))
 
 
-im1 = create_image("halpha_055_06563.fits",central_wavelength1,10,"ttauri1.png")
-im2 = create_image("halpha_055_06563.fits",central_wavelength2,10,"ttauri2.png")
+im1 = create_image("halpha_055_06563.fits",central_wavelength1,100,"ttauri1.png")
+im2 = create_image("halpha_055_06563.fits",central_wavelength2,100,"ttauri2.png")
 
 pix1 = im1.load()
 pix2 = im2.load()
@@ -124,4 +122,4 @@ for x in range(npixels):
     for y in range(npixels):
         pix1[x,y] = add_colour(pix1[x,y],pix2[x,y],0.5)
 
-im1.rotate(90).save("combined_50frame.png", "PNG")
+im1.rotate(90).save("combined_100frame.png", "PNG")
