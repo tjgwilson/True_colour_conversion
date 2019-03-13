@@ -8,9 +8,9 @@ from math import pi, cos
 
 
 num_bins = 100
-max_vel = 500000.
-central_wavelength1 = 656.28 #nano metres
-central_wavelength2 = 486.1
+max_vel = 50000.
+central_wavelength1 = 700. #nano metres
+central_wavelength2 = 400.
 npixels = 250
 
 
@@ -65,7 +65,7 @@ def normalize_point(x,min,max,new_min,new_max):
     return ((x-min)*(new_max-new_min))/(max-min)
 
 def add_colour(c1,c2,weight):#c1 and c2 are 3 element turples
-    weight = weight + 0.1
+    weight = weight * 10
     """if(c1[0] == 0 and c1[1] == 0 and c1[2] == 0):
         weight = 1.
     if(c2[0] == 0 and c2[1] == 0 and c2[2] == 0):
@@ -112,14 +112,14 @@ im1 = Image.new("RGB", (npixels,npixels))
 im2 = Image.new("RGB", (npixels,npixels))
 
 
-im1 = create_image("halpha_055_06563.fits",central_wavelength1,100,"ttauri1.png")
-im2 = create_image("halpha_055_06563.fits",central_wavelength2,100,"ttauri2.png")
+im1 = create_image("halpha_055_15700.fits",central_wavelength1,10,"ttauri1.png")
+im2 = create_image("halpha_055_40511.fits",central_wavelength2,10,"ttauri2.png")
 
 pix1 = im1.load()
 pix2 = im2.load()
 
 for x in range(npixels):
     for y in range(npixels):
-        pix1[x,y] = add_colour(pix1[x,y],pix2[x,y],0.5)
+        pix1[x,y] = add_colour(pix1[x,y],pix2[x,y],1)
 
 im1.rotate(90).save("combined_100frame.png", "PNG")
